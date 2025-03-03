@@ -1,7 +1,6 @@
 package com.example.Greeting.controller;
 
-//UC4
-
+//UC5
 import com.example.Greeting.model.Greeting;
 import com.example.Greeting.service.GreetingService;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/greetings")
 public class GreetingController {
-
     private final GreetingService greetingService;
 
     public GreetingController(GreetingService greetingService) {
@@ -24,7 +22,59 @@ public class GreetingController {
         String message = greetingService.generateGreeting(firstName, lastName);
         return greetingService.saveGreeting(message);
     }
+
+    @GetMapping("/{id}")
+    public Greeting getGreetingById(@PathVariable Long id) {
+        return greetingService.findGreetingById(id);
+    }
 }
+//Test the Endpoint
+//1️⃣ Save a New Greeting
+//sh
+//curl -X POST "http://localhost:8080/greetings?firstName=John&lastName=Doe"
+//Response:
+//json
+//{"id":1,"message":"Hello, John Doe!"}
+//2️⃣ Fetch the Greeting by ID
+//sh
+//curl -X GET "http://localhost:8080/greetings/1"
+//Response:
+//json
+//{"id":1,"message":"Hello, John Doe!"}
+//3️⃣ Try an ID That Doesn't Exist
+//sh
+//curl -X GET "http://localhost:8080/greetings/99"
+//Response:
+//json
+//null
+//📌 Final Answer
+//Now, your Greeting App can fetch a greeting message by ID from the repository! 🚀
+
+//UC4
+
+//import com.example.Greeting.model.Greeting;
+//import com.example.Greeting.service.GreetingService;
+//import org.springframework.web.bind.annotation.*;
+//
+//@RestController
+//@RequestMapping("/greetings")
+//public class GreetingController {
+//
+//    private final GreetingService greetingService;
+//
+//    public GreetingController(GreetingService greetingService) {
+//        this.greetingService = greetingService;
+//    }
+//
+//    @PostMapping
+//    public Greeting saveGreeting(
+//            @RequestParam(required = false) String firstName,
+//            @RequestParam(required = false) String lastName
+//    ) {
+//        String message = greetingService.generateGreeting(firstName, lastName);
+//        return greetingService.saveGreeting(message);
+//    }
+//}
 //Test with curl
 //1️⃣ Save a Greeting with Full Name
 //sh

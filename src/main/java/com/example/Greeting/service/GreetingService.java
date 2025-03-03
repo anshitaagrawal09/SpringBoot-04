@@ -1,11 +1,11 @@
 package com.example.Greeting.service;
 
-
-//UC4
-
+//UC5
 import com.example.Greeting.model.Greeting;
 import com.example.Greeting.repository.GreetingRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class GreetingService {
@@ -22,7 +22,7 @@ public class GreetingService {
 
     public String generateGreeting(String firstName, String lastName) {
         if (firstName != null && lastName != null) {
-            return "Hello, " + firstName + " " + lastName + "!";
+            return "Hello, " + firstName + "!";
         } else if (firstName != null) {
             return "Hello, " + firstName + "!";
         } else if (lastName != null) {
@@ -31,7 +31,44 @@ public class GreetingService {
             return "Hello, World!";
         }
     }
+
+    public Greeting findGreetingById(Long id) {
+        Optional<Greeting> greeting = greetingRepository.findById(id);
+        return greeting.orElse(null); // Return null if not found
+    }
 }
+
+//UC4
+
+//import com.example.Greeting.model.Greeting;
+//import com.example.Greeting.repository.GreetingRepository;
+//import org.springframework.stereotype.Service;
+//
+//@Service
+//public class GreetingService {
+//    private final GreetingRepository greetingRepository;
+//
+//    public GreetingService(GreetingRepository greetingRepository) {
+//        this.greetingRepository = greetingRepository;
+//    }
+//
+//    public Greeting saveGreeting(String message) {
+//        Greeting greeting = new Greeting(message);
+//        return greetingRepository.save(greeting);
+//    }
+//
+//    public String generateGreeting(String firstName, String lastName) {
+//        if (firstName != null && lastName != null) {
+//            return "Hello, " + firstName + " " + lastName + "!";
+//        } else if (firstName != null) {
+//            return "Hello, " + firstName + "!";
+//        } else if (lastName != null) {
+//            return "Hello, " + lastName + "!";
+//        } else {
+//            return "Hello, World!";
+//        }
+//    }
+//}
 
 
 //UC3
