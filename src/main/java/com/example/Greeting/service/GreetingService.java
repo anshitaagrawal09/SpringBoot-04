@@ -1,26 +1,59 @@
 package com.example.Greeting.service;
 
 
-//UC3
+//UC4
+
 import com.example.Greeting.model.Greeting;
-import com.example.Greeting.model.User;
+import com.example.Greeting.repository.GreetingRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GreetingService {
+    private final GreetingRepository greetingRepository;
 
-    public Greeting getGreeting(User user) {
-        if (user.getFirstName() != null && user.getLastName() != null) {
-            return new Greeting("Hello, " + user.getFirstName() + " " + user.getLastName() + "!");
-        } else if (user.getFirstName() != null) {
-            return new Greeting("Hello, " + user.getFirstName() + "!");
-        } else if (user.getLastName() != null) {
-            return new Greeting("Hello, " + user.getLastName() + "!");
+    public GreetingService(GreetingRepository greetingRepository) {
+        this.greetingRepository = greetingRepository;
+    }
+
+    public Greeting saveGreeting(String message) {
+        Greeting greeting = new Greeting(message);
+        return greetingRepository.save(greeting);
+    }
+
+    public String generateGreeting(String firstName, String lastName) {
+        if (firstName != null && lastName != null) {
+            return "Hello, " + firstName + " " + lastName + "!";
+        } else if (firstName != null) {
+            return "Hello, " + firstName + "!";
+        } else if (lastName != null) {
+            return "Hello, " + lastName + "!";
         } else {
-            return new Greeting("Hello World!");
+            return "Hello, World!";
         }
     }
 }
+
+
+//UC3
+//import com.example.Greeting.model.Greeting;
+//import com.example.Greeting.model.User;
+//import org.springframework.stereotype.Service;
+//
+//@Service
+//public class GreetingService {
+//
+//    public Greeting getGreeting(User user) {
+//        if (user.getFirstName() != null && user.getLastName() != null) {
+//            return new Greeting("Hello, " + user.getFirstName() + " " + user.getLastName() + "!");
+//        } else if (user.getFirstName() != null) {
+//            return new Greeting("Hello, " + user.getFirstName() + "!");
+//        } else if (user.getLastName() != null) {
+//            return new Greeting("Hello, " + user.getLastName() + "!");
+//        } else {
+//            return new Greeting("Hello World!");
+//        }
+//    }
+//}
 
 
 
