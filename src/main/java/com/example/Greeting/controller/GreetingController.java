@@ -1,8 +1,8 @@
 package com.example.Greeting.controller;
 
-//UC3
+//UC4
+
 import com.example.Greeting.model.Greeting;
-import com.example.Greeting.model.User;
 import com.example.Greeting.service.GreetingService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +17,73 @@ public class GreetingController {
     }
 
     @PostMapping
-    public Greeting getGreeting(@RequestBody User user) {
-        return greetingService.getGreeting(user);
+    public Greeting saveGreeting(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName
+    ) {
+        String message = greetingService.generateGreeting(firstName, lastName);
+        return greetingService.saveGreeting(message);
     }
 }
+//Test with curl
+//1️⃣ Save a Greeting with Full Name
+//sh
+//curl -X POST "http://localhost:8080/greetings?firstName=John&lastName=Doe"
+//Response:
+//json
+//{"id":1,"message":"Hello, John Doe!"}
+//2️⃣ Save a Greeting with Only First Name
+//sh
+//curl -X POST "http://localhost:8080/greetings?firstName=Alice"
+//Response:
+//json
+//{"id":2,"message":"Hello, Alice!"}
+//3️⃣ Save a Greeting with Only Last Name
+//sh
+//curl -X POST "http://localhost:8080/greetings?lastName=Smith"
+//Response:
+//{"id":3,"message":"Hello, Smith!"}
+//4️⃣ Save a Default Greeting
+//sh
+//curl -X POST "http://localhost:8080/greetings"
+//Response:
+//json
+//{"id":4,"message":"Hello, World!"}
+//✅ 8. View Saved Greetings
+//Spring Boot automatically exposes an H2 Console to view the stored messages.
+//Open your browser and go to:
+//👉 http://localhost:8080/h2-console
+//Use the JDBC URL: jdbc:h2:mem:testdb //see in output on intellij
+//Click Connect, then run:
+//sql
+//SELECT * FROM GREETING;
+//This will show all saved greetings!
+//📌 Final Answer
+//🔹 Now your Greeting App saves messages in a database! 🎉
+//🔹 Uses @PostMapping because saving changes data.
+//🔹 Uses Spring Data JPA to store greetings efficiently.
+
+//UC3
+//import com.example.Greeting.model.Greeting;
+//import com.example.Greeting.model.User;
+//import com.example.Greeting.service.GreetingService;
+//import org.springframework.web.bind.annotation.*;
+//
+//@RestController
+//@RequestMapping("/greetings")
+//public class GreetingController {
+//
+//    private final GreetingService greetingService;
+//
+//    public GreetingController(GreetingService greetingService) {
+//        this.greetingService = greetingService;
+//    }
+//
+//    @PostMapping
+//    public Greeting getGreeting(@RequestBody User user) {
+//        return greetingService.getGreeting(user);
+//    }
+//}
 //Test Using curl
 //Case 1: Both First Name and Last Name
 //sh
