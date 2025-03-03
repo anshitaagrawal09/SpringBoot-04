@@ -1,6 +1,6 @@
 package com.example.Greeting.controller;
 
-//UC6
+//UC7
 import com.example.Greeting.model.Greeting;
 import com.example.Greeting.service.GreetingService;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +34,75 @@ public class GreetingController {
     public List<Greeting> getAllGreetings() {
         return greetingService.getAllGreetings();
     }
+
+    @PutMapping("/{id}")
+    public Greeting updateGreeting(@PathVariable Long id, @RequestParam String newMessage) {
+        return greetingService.updateGreeting(id, newMessage);
+    }
 }
+//Test the Endpoints
+//1️⃣ Save a New Greeting
+//sh
+//curl -X POST "http://localhost:8080/greetings?firstName=Alice"
+//Response:
+//json
+//{"id":1, "message":"Hello, Alice!"}
+//2️⃣ Edit the Greeting
+//sh
+//curl -X PUT "http://localhost:8080/greetings/1?newMessage=Hi Alice, welcome!"
+//Response:
+//json
+//{"id":1, "message":"Hi Alice, welcome!"}
+//3️⃣ Fetch the Updated Greeting
+//sh
+//curl -X GET "http://localhost:8080/greetings/1"
+//Response:
+//json
+//{"id":1, "message":"Hi Alice, welcome!"}
+//4️⃣ Try Editing a Non-Existing Greeting
+//sh
+//curl -X PUT "http://localhost:8080/greetings/99?newMessage=Hello Stranger!"
+//Response:
+//json
+//null
+//📌 Final Answer
+//✅ Now, your Greeting App can edit a greeting message by ID in the repository!
+
+//UC6
+//import com.example.Greeting.model.Greeting;
+//import com.example.Greeting.service.GreetingService;
+//import org.springframework.web.bind.annotation.*;
+//
+//import java.util.List;
+//
+//@RestController
+//@RequestMapping("/greetings")
+//public class GreetingController {
+//    private final GreetingService greetingService;
+//
+//    public GreetingController(GreetingService greetingService) {
+//        this.greetingService = greetingService;
+//    }
+//
+//    @PostMapping
+//    public Greeting saveGreeting(
+//            @RequestParam(required = false) String firstName,
+//            @RequestParam(required = false) String lastName
+//    ) {
+//        String message = greetingService.generateGreeting(firstName, lastName);
+//        return greetingService.saveGreeting(message);
+//    }
+//
+//    @GetMapping("/{id}")
+//    public Greeting getGreetingById(@PathVariable Long id) {
+//        return greetingService.findGreetingById(id);
+//    }
+//
+//    @GetMapping
+//    public List<Greeting> getAllGreetings() {
+//        return greetingService.getAllGreetings();
+//    }
+//}
 //Test the Endpoints
 //1️⃣ Save Some Greetings
 //sh
