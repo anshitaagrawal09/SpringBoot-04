@@ -1,8 +1,9 @@
 package com.example.Greeting.controller;
 
-//UC7
+//UC8
 import com.example.Greeting.model.Greeting;
 import com.example.Greeting.service.GreetingService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,7 +40,89 @@ public class GreetingController {
     public Greeting updateGreeting(@PathVariable Long id, @RequestParam String newMessage) {
         return greetingService.updateGreeting(id, newMessage);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteGreeting(@PathVariable Long id) {
+        boolean deleted = greetingService.deleteGreeting(id);
+        if (deleted) {
+            return ResponseEntity.ok("Greeting with ID " + id + " deleted successfully.");
+        } else {
+            return ResponseEntity.status(404).body("Greeting with ID " + id + " not found.");
+        }
+    }
 }
+//@DeleteMapping("/{id}") → Handles deleting a greeting by ID.
+// ResponseEntity<String> → Returns status 200 (OK) if deleted, or 404 (Not Found) if ID doesn't exist.
+//✅ Test the Endpoints
+//1️⃣ Save a New Greeting
+//sh
+//curl -X POST "http://localhost:8080/greetings?firstName=Alice"
+//Response:
+//json
+//{"id":1, "message":"Hello, Alice!"}
+//2️⃣ Delete the Greeting
+//sh
+//curl -X DELETE "http://localhost:8080/greetings/1"
+//Response:
+//sh
+//Greeting with ID 1 deleted successfully.
+//3️⃣ Try Deleting the Same Greeting Again
+//sh
+//curl -X DELETE "http://localhost:8080/greetings/1"
+//Response:
+//sh
+//Greeting with ID 1 not found.
+//4️⃣ List All Greetings After Deletion
+//sh
+//curl -X GET "http://localhost:8080/greetings"
+//Response:
+//json
+//[]
+//(Empty list, since all greetings were deleted.)
+//📌 Final Answer
+//✅ Now, your Greeting App can delete a greeting message by ID in the repository!
+
+
+//UC7
+//import com.example.Greeting.model.Greeting;
+//import com.example.Greeting.service.GreetingService;
+//import org.springframework.web.bind.annotation.*;
+//
+//import java.util.List;
+//
+//@RestController
+//@RequestMapping("/greetings")
+//public class GreetingController {
+//    private final GreetingService greetingService;
+//
+//    public GreetingController(GreetingService greetingService) {
+//        this.greetingService = greetingService;
+//    }
+//
+//    @PostMapping
+//    public Greeting saveGreeting(
+//            @RequestParam(required = false) String firstName,
+//            @RequestParam(required = false) String lastName
+//    ) {
+//        String message = greetingService.generateGreeting(firstName, lastName);
+//        return greetingService.saveGreeting(message);
+//    }
+//
+//    @GetMapping("/{id}")
+//    public Greeting getGreetingById(@PathVariable Long id) {
+//        return greetingService.findGreetingById(id);
+//    }
+//
+//    @GetMapping
+//    public List<Greeting> getAllGreetings() {
+//        return greetingService.getAllGreetings();
+//    }
+//
+//    @PutMapping("/{id}")
+//    public Greeting updateGreeting(@PathVariable Long id, @RequestParam String newMessage) {
+//        return greetingService.updateGreeting(id, newMessage);
+//    }
+//}
 //Test the Endpoints
 //1️⃣ Save a New Greeting
 //sh
