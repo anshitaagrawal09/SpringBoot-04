@@ -54,4 +54,21 @@ public class AuthenticationService {
         String token = jwtUtil.generateToken(user.getEmail());
         return new JwtResponseDTO("Login successful!", token);
     }
+
+
+    //UC-12 Forgot Password Implementation
+    public void forgotPassword(String email, String newPassword) {
+        Optional<AuthUser> userOptional = authUserRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            throw new RuntimeException("Sorry! We cannot find the user email: " + email);
+        }
+
+        AuthUser user = userOptional.get();
+        user.setPassword(passwordEncoder.encode(newPassword)); // Hash new password
+        authUserRepository.save(user);
+
+        // TODO: Send email notification (Optional)
+        System.out.println("Email sent: Your password has been changed successfully.");
+    }
 }
