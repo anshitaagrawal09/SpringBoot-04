@@ -71,4 +71,27 @@ public class AuthenticationService {
         // TODO: Send email notification (Optional)
         System.out.println("Email sent: Your password has been changed successfully.");
     }
+
+    //UC-13 Reset Password
+    public String resetPassword(String email, String currentPassword, String newPassword) {
+        Optional<AuthUser> userOptional = authUserRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            throw new RuntimeException("User not found with email: " + email);
+        }
+
+        AuthUser user = userOptional.get();
+
+        // Validate the current password
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new RuntimeException("Current password is incorrect!");
+        }
+
+        // Hash and update the new password
+        user.setPassword(passwordEncoder.encode(newPassword));
+        authUserRepository.save(user);
+
+        return "Password reset successfully!";
+    }
+
 }

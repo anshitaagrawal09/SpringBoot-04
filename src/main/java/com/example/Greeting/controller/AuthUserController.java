@@ -49,4 +49,26 @@ public class AuthUserController {
     //}
     //We acn check in db also 
 
+    //UC-13 Reset Password
+    @PutMapping("/resetPassword/{email}")
+    public ResponseEntity<String> resetPassword(
+            @PathVariable String email,
+            @RequestBody Map<String, String> requestBody) {
+
+        String currentPassword = requestBody.get("currentPassword");
+        String newPassword = requestBody.get("newPassword");
+
+        if (currentPassword == null || newPassword == null) {
+            return ResponseEntity.badRequest().body("Both current and new passwords are required!");
+        }
+
+        return ResponseEntity.ok(authenticationService.resetPassword(email, currentPassword, newPassword));
+    }
+    //curl -X PUT "http://localhost:8080/auth/resetPassword/john@example.com" \
+    //     -H "Content-Type: application/json" \
+    //     -d '{
+    //           "currentPassword": "OldPassword@123",
+    //           "newPassword": "NewStrong@123"
+    //         }'
+
 }
