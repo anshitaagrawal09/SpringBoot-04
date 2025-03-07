@@ -8,6 +8,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
+import java.util.HashMap;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -25,4 +28,25 @@ public class AuthUserController {
     public ResponseEntity<JwtResponseDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
         return ResponseEntity.ok(authenticationService.login(loginDTO));
     }
+
+    //UC-12 Forgot Password Implementation
+    @PutMapping("/forgotPassword/{email}")
+    public ResponseEntity<Map<String, String>> forgotPassword(@PathVariable String email, @RequestBody Map<String, String> requestBody) {
+        String newPassword = requestBody.get("password");
+        authenticationService.forgotPassword(email, newPassword);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Password has been changed successfully!");
+
+        return ResponseEntity.ok(response);
+    }
+    //First register a user then give its email id in forget password and then new email id got set
+    //curl -X PUT "http://localhost:8080/auth/forgotPassword/user@example.com" \
+    //     -H "Content-Type: application/json" \
+    //     -d '{"password": "NewStrong@123"}'
+    //Output -{
+    //  "message": "Password has been changed successfully!"
+    //}
+    //We acn check in db also 
+
 }
